@@ -1,7 +1,9 @@
 package com.rest.demo.rest;
 
 import com.rest.demo.entity.Student;
+import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,14 +14,27 @@ import java.util.List;
 @RequestMapping("/api")
 public class StudentRestController {
 
-    @GetMapping("/students")
-    public List<Student> getStudents() {
+    private List<Student> theStudents = new ArrayList<>();
 
-        List<Student> theStudents = new ArrayList<>();
+    @PostConstruct
+    public void loadData() {
         theStudents.add(new Student("Poornima", "patel"));
         theStudents.add(new Student("Mario", "Rossi"));
-        theStudents.add(new Student("Mary", "Smith"));
 
+
+
+
+        theStudents.add(new Student("Mary", "Smith"));
+    }
+
+    @GetMapping("/students")
+    public List<Student> getStudents() {
         return theStudents;
     }
+
+    @GetMapping("/students/{studentId}")
+    public Student getStudent(@PathVariable int studentId) {
+        return theStudents.get(studentId);
+    }
+
 }
